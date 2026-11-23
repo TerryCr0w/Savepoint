@@ -90,4 +90,5 @@ Periodic world backups and restore-from-backup for Paper servers, with a login-l
 
 ## 许可 License
 
-未声明。添加前请确认你想要的开源协议。
+本项目采用 [MIT License](LICENSE) 开源。可自由使用、修改、分发，保留版权声明即可。
+This project is licensed under the [MIT License](LICENSE).
