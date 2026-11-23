@@ -14,7 +14,18 @@ commands:
       /savepoint restore <latest|name> [unit...] [skip-backup] [--force]
       /savepoint cancel | /savepoint unlock | /savepoint reload
       /savepoint help
-    aliases: [sp]
+    permission: savepoint.admin
+    permission-message: You do not have permission to use Savepoint.
+  sp:
+    description: Alias for /savepoint - periodic/manual backup and restore (see /sp help)
+    usage: |-
+      /sp - status
+      /sp backup [name] [unit...] [--force]
+      /sp world list
+      /sp list
+      /sp restore <latest|name> [unit...] [skip-backup] [--force]
+      /sp cancel | /sp unlock | /sp reload
+      /sp help
     permission: savepoint.admin
     permission-message: You do not have permission to use Savepoint.
 permissions:

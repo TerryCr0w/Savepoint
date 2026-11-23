@@ -94,6 +94,11 @@ public final class Savepoint extends JavaPlugin implements Listener, TabComplete
         if (getCommand("savepoint") != null) {
             getCommand("savepoint").setTabCompleter(this);
         }
+        // sp 是独立顶层命令（非 plugin.yml aliases），需单独挂补全器，
+        // 否则 brigadier 化 Paper 上 /sp <Tab> 不会触发子命令提示。
+        if (getCommand("sp") != null) {
+            getCommand("sp").setTabCompleter(this);
+        }
         Bukkit.getScheduler().runTaskTimer(this, this::tick, 20L, 20L);
         // 上次回档改名换位的旧世界目录可能因本进程仍占用句柄而没删掉，
         // 此时本进程已重启、句柄已释放，异步清理掉这些 *.pre-restore-* 残留。

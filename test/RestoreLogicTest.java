@@ -217,10 +217,12 @@ public class RestoreLogicTest {
         eq("plugin name", py.get("name"), "Savepoint");
         eq("main class matches compiled class", py.get("main"), plugin.getSimpleName());
         Map<String, Object> cmds = castMap(py.get("commands"));
-        eq("command label", String.valueOf(cmds.keySet()), "[savepoint]");
+        eq("command labels", String.valueOf(cmds.keySet()), "[savepoint, sp]");
         Map<String, Object> spCmd = castMap(cmds.get("savepoint"));
-        eq("command aliases", String.valueOf(spCmd.get("aliases")), "[sp]");
+        eq("savepoint has no aliases (sp is a top-level command)", spCmd.get("aliases"), null);
         eq("command permission", spCmd.get("permission"), "savepoint.admin");
+        Map<String, Object> spAlias = castMap(cmds.get("sp"));
+        eq("sp command permission", spAlias.get("permission"), "savepoint.admin");
         eq("declared permission matches",
                 String.valueOf(castMap(py.get("permissions")).keySet()), "[savepoint.admin]");
         String usage = String.valueOf(spCmd.get("usage"));
