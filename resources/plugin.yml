@@ -1,5 +1,5 @@
 name: Savepoint
-version: 1.4.0
+version: 1.4.1
 main: Savepoint
 api-version: '26.2'
 description: Periodic world backups, offline final backup, manual backup and restore with login lock.

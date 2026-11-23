@@ -39,7 +39,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public final class Savepoint extends JavaPlugin implements Listener, TabCompleter {
 
-    private static final String VERSION = "1.4.0";
+    private static final String VERSION = "1.4.1";
     /** 内部标记沿用历史 wb 前缀：改名会让旧版本遗留在服务器根目录的锁定文件认不出来。 */
     private static final String LOCK_NAME = "__wb_lock__";
     private static final String MANIFEST_NAME = "savepoint-manifest.txt";

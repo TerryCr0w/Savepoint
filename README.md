@@ -4,7 +4,7 @@
 Periodic world backups and restore-from-backup for Paper servers, with a login-lock safety flow.
 
 - 插件名 / name: **Savepoint**
-- 版本 / version: **1.4.0**
+- 版本 / version: **1.4.1**
 - 命令 / command: `/savepoint`（别名 `/sp`），权限 `savepoint.admin`（默认 op）
 
 ---
