@@ -1,0 +1,23 @@
+name: Savepoint
+version: 1.4.0
+main: Savepoint
+api-version: '26.2'
+description: Periodic world backups, offline final backup, manual backup and restore with login lock.
+commands:
+  savepoint:
+    description: Savepoint - periodic/manual backup and restore (see /savepoint help)
+    usage: |-
+      /savepoint - status
+      /savepoint backup [name] [unit...] [--force]
+      /savepoint world list
+      /savepoint list
+      /savepoint restore <latest|name> [unit...] [skip-backup] [--force]
+      /savepoint cancel | /savepoint unlock | /savepoint reload
+      /savepoint help
+    aliases: [sp]
+    permission: savepoint.admin
+    permission-message: You do not have permission to use Savepoint.
+permissions:
+  savepoint.admin:
+    description: Allows /savepoint backup, restore, list, reload and status
+    default: op

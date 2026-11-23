@@ -1,0 +1,25 @@
+# 备份文件夹位置：
+#   相对路径 -> 相对服务器根目录，如 "backups" 即 paper-26.2/backups
+#   绝对路径 -> 如 "D:/mcbackups"（Windows 反斜杠在 yaml 中需写成 "D:\\mcbackups"）
+# 备份/回档粒度：世界整体（如 bskyblock_world）或单维度（如 bskyblock_world@the_nether），
+#   用 /savepoint world list 查看可备份单位。
+backup-dir: "backups"
+
+# 有玩家在线时的间隔备份时长（分钟）
+interval-minutes: 60
+
+# 最后一名玩家离线后的倒计时（分钟）；期间有人重新上线则重置
+last-offline-delay-minutes: 3
+
+# 最多保留的备份份数，超出后自动删除最旧的 zip
+keep-count: 48
+
+# 无人在线时的行为：
+#   auto       = 自动检测（读 config/paper-global.yml 的 settings.pause-when-empty-seconds，
+#                值 >= 0 表示服务器会暂停 -> final-only；否则 always）
+#   always     = 一直按间隔备份（服务器不暂停时推荐，磁盘够就用这个）
+#   final-only = 末次备份后停止，直到有玩家再上线
+when-empty: auto
+
+# /savepoint restore 回档前是否自动先备份当前存档（命令里加 skip-backup 可单次跳过）
+restore-backup-before: true
