@@ -175,17 +175,19 @@ public final class Savepoint extends JavaPlugin implements Listener, TabComplete
                 startBackup("interval backup", null, null, true, null);
             }
         } else if (emptyMode().equals("always")) {
-            // 空服仍按间隔继续备份：沿用在线时的间隔计时器，不做"倒计时 final backup"。
+            // 空服：先按离线倒计时做一次 final backup（抓下线路点），再转入每 interval 分钟的间隔备份。
             if (!emptyAnnounced) {
                 emptyAnnounced = true;
-                getLogger().info("Server empty (empty mode: always), continuing interval backups every "
-                        + intervalMinutes() + "m.");
+                offlineDeadline = now + delayMs;
+                getLogger().info("All players offline (empty mode: always), final backup in "
+                        + delayMinutes() + "m, then interval backups every " + intervalMinutes() + "m.");
             }
-            if (!periodicActive) {
+            if (offlineDeadline > 0 && now >= offlineDeadline) {
+                offlineDeadline = 0;
+                startBackup("final backup", null, null, true, null);
                 periodicActive = true;
                 periodicNextRun = now + intervalMs;
-            }
-            if (now >= periodicNextRun) {
+            } else if (offlineDeadline == 0 && periodicActive && now >= periodicNextRun) {
                 periodicNextRun = now + intervalMs;
                 startBackup("interval backup", null, null, true, null);
             }
