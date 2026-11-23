@@ -49,6 +49,7 @@ public final class Savepoint extends JavaPlugin implements Listener, TabComplete
     private boolean periodicActive = false;
     private long periodicNextRun = 0;
     private long offlineDeadline = 0;
+    private boolean emptyAnnounced = false;
     private volatile boolean backupRunning = false;
     private volatile String lastBackup = "none";
     private String pendingConfirm = null;
@@ -163,6 +164,7 @@ public final class Savepoint extends JavaPlugin implements Listener, TabComplete
         long delayMs = delayMinutes() * 60_000L;
 
         if (online) {
+            emptyAnnounced = false;
             offlineDeadline = 0;
             if (!periodicActive) {
                 periodicActive = true;
@@ -172,23 +174,33 @@ public final class Savepoint extends JavaPlugin implements Listener, TabComplete
                 periodicNextRun = now + intervalMs;
                 startBackup("interval backup", null, null, true, null);
             }
+        } else if (emptyMode().equals("always")) {
+            // 空服仍按间隔继续备份：沿用在线时的间隔计时器，不做"倒计时 final backup"。
+            if (!emptyAnnounced) {
+                emptyAnnounced = true;
+                getLogger().info("Server empty (empty mode: always), continuing interval backups every "
+                        + intervalMinutes() + "m.");
+            }
+            if (!periodicActive) {
+                periodicActive = true;
+                periodicNextRun = now + intervalMs;
+            }
+            if (now >= periodicNextRun) {
+                periodicNextRun = now + intervalMs;
+                startBackup("interval backup", null, null, true, null);
+            }
         } else {
-            if (periodicActive) {
+            // final-only：末次玩家离线倒计时后做一次 final backup，然后停止直到有人再上线。
+            if (!emptyAnnounced) {
+                emptyAnnounced = true;
                 periodicActive = false;
                 offlineDeadline = now + delayMs;
-                getLogger().info("All players offline (empty mode: " + emptyMode()
-                        + "), final backup in " + delayMinutes() + "m.");
+                getLogger().info("All players offline (empty mode: final-only), final backup in "
+                        + delayMinutes() + "m.");
             }
             if (offlineDeadline > 0 && now >= offlineDeadline) {
-                if (emptyMode().equals("final-only")) {
-                    offlineDeadline = -1;
-                    startBackup("final backup", null, null, true, null);
-                } else {
-                    startBackup("final backup", null, null, true, null);
-                    offlineDeadline = 0;
-                    periodicActive = true;
-                    periodicNextRun = now + intervalMs;
-                }
+                offlineDeadline = -1;
+                startBackup("final backup", null, null, true, null);
             }
         }
     }
